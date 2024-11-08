@@ -35,4 +35,4 @@ This result indicates that solving an RSA 1024-bit problem with this algorithm w
 ### Note!
 These results were achieved using Python on a **not so good computer**. If implemented in C++ and run on a high-performance, "monster" computing setup, the performance would likely improve significantly.
 
-However, it’s important to remember that this is a handmade algorithm with no intention to compete with the best-in-class factoring algorithms. It was just fun coding it
+However, it’s important to remember that this is a handmade algorithm with no intention to compete with the best-in-class factoring algorithms. It was just fun coding it.
