@@ -3,7 +3,7 @@ import random
 from math import floor, log10
 from collections import defaultdict
 import matplotlib.pyplot as plt
-from prime_factorizer import find_pq
+from prime_factorizer import find_prime_factors
 from tqdm import tqdm
 import numpy as np
 from scipy.stats import linregress
@@ -29,7 +29,7 @@ def benchmark(p: int, q: int, n_test: int = 100) -> float:
     for _ in range(n_test):
         # mesure the time of a single function call
         start = time.perf_counter()
-        result = find_pq(p * q)
+        result = find_prime_factors(p * q)
         end = time.perf_counter()
 
         # ensure result is correct
