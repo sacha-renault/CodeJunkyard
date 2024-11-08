@@ -32,7 +32,7 @@ def find_pq(n: int) -> tuple[int, int] | None:
         dn = int(str(n)[-(depth + 1):])
         if dn != 0:
             for pp, pq in find_div_pair(n, dn, p, q, depth):
-                if pp * pq == n and pp != 1 and pq != 1:
+                if pp * pq == n and pp != 1 and pq != 1 and isprime(pp) and isprime(pq):
                     return pp, pq
                 elif pp * pq < n:
                     result = _inner_find_pq(n, pq, pp, depth + 1)
@@ -40,7 +40,6 @@ def find_pq(n: int) -> tuple[int, int] | None:
                         return result  # Return result up the call stack if found
         return None
     return _inner_find_pq(n)
-
 
 
 if __name__ == "__main__":
