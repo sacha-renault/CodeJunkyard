@@ -1,5 +1,3 @@
-from .coordinates import _EPSILON_, Coordinates
-from .body import Body, create_body
-
-class Constant:
-    G = 9.80665
+from .coordinates import Coordinates
+from .body import Body, create_body, sphere_volume
+from .engine import System

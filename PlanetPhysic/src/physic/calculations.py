@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 import math
 from typing import NamedTuple, List, Tuple
-from . import Constant, Coordinates, _EPSILON_
+from . import Coordinates
+from .constant import Constant
 from .body import Body
 
 # Create an alias for DistanceOutput
@@ -23,7 +24,7 @@ def get_distance_as_vector(coord1: Coordinates, coord2: Coordinates) -> Vector:
     # Calculate the magnitude (Euclidean distance)
     magnitude = math.sqrt(sum(coord ** 2 for coord in difference_vector.coords))
 
-    if magnitude < _EPSILON_:
+    if magnitude < Constant.EPSILON:
         raise ValueError("Cannot normalize a zero vector.")
 
     # Normalize the direction vector to get the unit vector
@@ -48,8 +49,8 @@ def calculate_acc_array(bodies: List[Body]) -> List[Coordinates]:
         for j, body2 in enumerate(bodies[i+1:], start=i+1):
             magnitude, unit_vector = gravity_attraction(body1, body2)
             acc_vector = unit_vector * magnitude
-            new_acc[i] += acc_vector
-            new_acc[j] -= acc_vector
+            new_acc[i] += acc_vector / body1.weight
+            new_acc[j] -= acc_vector / body2.weight
 
     return new_acc
 

@@ -4,6 +4,9 @@ from typing import Optional
 import math
 from .coordinates import Coordinates
 
+def sphere_volume(radius: float) -> float:
+    return 4 / 3 * math.pi * math.pow(radius, 3)
+
 def create_body(dimension: int,
                 radius: float,
                 density: float,
@@ -23,6 +26,12 @@ class Body:
     speed: Coordinates
     acceleration: Coordinates
 
+    def __post_init__(self) -> None:
+        self.unique_id = id(self)
+
+    def __hash__(self):
+        return self.unique_id
+
     @property
     def weight(self) -> float:
-        return 4 / 3 * math.pi * math.pow(self.radius, 3) * self.density
+        return sphere_volume(self.radius) * self.density

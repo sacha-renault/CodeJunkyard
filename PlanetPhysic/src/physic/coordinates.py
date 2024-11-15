@@ -2,13 +2,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Union, Callable, NamedTuple
 import math
+from .constant import Constant
 
 # alias numeric
 Numeric = Union[float, int]
-
-# for handling div by 0
-_EPSILON_ = 1e-9
-"""Handle division by 0"""
 
 # single operation
 def addition(x: Numeric, y: Numeric) -> Numeric:
@@ -21,11 +18,11 @@ def multiplication(x: Numeric, y: Numeric) -> Numeric:
     return x * y
 
 def division(x: Numeric, y: Numeric) -> Numeric:
-    if abs(y) < _EPSILON_:
+    if abs(y) < Constant.EPSILON:
         if y >= 0:
-            return x / _EPSILON_
+            return x / Constant.EPSILON
         else:
-            return - x / _EPSILON_
+            return - x / Constant.EPSILON
     return x / y
 
 @dataclass
