@@ -29,16 +29,17 @@ class System:
             new_radius = ((3 * (v1 + v2)) / (4 * math.pi)) ** (1/3)
 
             # Calculate total mass
-            mass1 = body1.density * v1
-            mass2 = body2.density * v2
-            total_mass = mass1 + mass2
+            total_mass = body1.weight + body2.weight
             new_density = total_mass / sphere_volume(new_radius)
 
             # calc new position
             new_position = (body1.position + body2.position) / 2
 
+            # calculate new speed
+            new_speed = (body1.speed * body1.weight + body2.speed * body2.weight) / (2 * total_mass)
+
             # create a new body as fusion of the two previous
-            new_body = create_body(body1.position.ndim, new_radius, new_density, new_position)
+            new_body = create_body(body1.position.ndim, new_radius, new_density, new_position, new_speed)
             body_to_remove.add(body1)
             body_to_remove.add(body2)
             self.bodies.append(new_body)
