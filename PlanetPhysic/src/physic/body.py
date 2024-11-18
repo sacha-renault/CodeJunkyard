@@ -34,4 +34,8 @@ class Body:
 
     @property
     def weight(self) -> float:
-        return sphere_volume(self.radius) * self.density
+        return self.volume * self.density
+
+    @property
+    def volume(self) -> float:
+        return sphere_volume(self.radius)

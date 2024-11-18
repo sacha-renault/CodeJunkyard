@@ -50,9 +50,14 @@ class System:
 
     def _update_positions(self) -> None:
         for body, acceleration in zip(self.bodies, calculate_acc_array(self.bodies), strict=True):
-            body.acceleration = acceleration                        # acceleration updated at each step
-            body.speed = calculate_new_speed(body, self.dt)         # speed updated at each step (before position)
-            body.position = calculate_new_position(body, self.dt)   # position updated at each step
+            # acceleration updated at each step
+            body.acceleration = acceleration
+
+            # speed updated at each step (before position)
+            body.speed = calculate_new_speed(body, self.dt)
+
+            # position updated at each step
+            body.position = calculate_new_position(body, self.dt)
 
     def step(self) -> None:
         # increment frame
