@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import List, Union, Callable, NamedTuple
-import math
+from typing import List, Union, Callable, Tuple
+import random
 from .constant import Constant
 
 # alias numeric
@@ -32,6 +32,16 @@ class Coordinates:
     @property
     def ndim(self) -> int:
         return len(self.coords)
+
+    @classmethod
+    def random(cls, ndim: int, min_maxs: Union[Tuple[float, float], List[Tuple[float, float]]]) -> Coordinates:
+        if not isinstance(min_maxs, list):
+            min_maxs = [min_maxs for _ in range(ndim)]
+        values = []
+        for min_max in min_maxs:
+            rnd_range = min_max[1] - min_max[0]
+            values.append(random.random() * rnd_range + min_max[0])
+        return cls(values)
 
     def _operation(self, other: Union[Numeric, Coordinates], operation: Callable[[Numeric, Numeric], Numeric]) -> Coordinates:
         if isinstance(other, Numeric):
