@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 import math
 from typing import NamedTuple, List, Tuple
 from . import Coordinates
@@ -71,3 +70,15 @@ def get_collision(bodies: List[Body]) -> List[Tuple[int, int]]:
                 body_collision.append((i, j))
 
     return body_collision
+
+def as_vector(coordinates: Coordinates) -> Vector:
+    # calculate magnitude
+    magnitude = math.sqrt(sum(value ** 2 for value in coordinates.coords))
+
+    # unit vector
+    if magnitude == 0:
+        unit_vector = Coordinates([0.0] * len(coordinates.coords))
+    else:
+        unit_vector = Coordinates([value / magnitude for value in coordinates.coords])
+
+    return Vector(magnitude, unit_vector)

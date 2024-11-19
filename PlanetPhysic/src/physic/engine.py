@@ -1,6 +1,6 @@
 from typing import List
 import math
-from .calculations import (calculate_acc_array, calculate_new_speed, calculate_new_position, get_collision)
+from .calculations import (calculate_acc_array, calculate_new_speed, calculate_new_position, get_collision, as_vector)
 from . import Body, create_body, sphere_volume
 
 class System:
@@ -35,11 +35,22 @@ class System:
             # calc new position
             new_position = (body1.position + body2.position) / 2
 
+            # calculate kinetic energy of body1
+            speed_vector1 = as_vector(body1.speed)
+            body1_kinetic = speed_vector1.unit_vector * (speed_vector1.magnitude ** 2) * body1.weight * 0.5
+
+            # calculate kinetic energy of body2
+            speed_vector2 = as_vector(body2.speed)
+            body2_kinetic = speed_vector2.unit_vector * (speed_vector2.magnitude ** 2) * body2.weight * 0.5
+
+            # calculate new kinetic
+            new_kinetic = as_vector(body1_kinetic + body2_kinetic)
+
             # calculate new speed
-            new_speed = (body1.speed * body1.weight + body2.speed * body2.weight) / (2 * total_mass)
+            new_speed_magnitude = math.sqrt((2 * new_kinetic.magnitude) / total_mass)
 
             # create a new body as fusion of the two previous
-            new_body = create_body(body1.position.ndim, new_radius, new_density, new_position, new_speed)
+            new_body = create_body(body1.position.ndim, new_radius, new_density, new_position, new_kinetic.unit_vector * new_speed_magnitude)
             body_to_remove.add(body1)
             body_to_remove.add(body2)
             self.bodies.append(new_body)
