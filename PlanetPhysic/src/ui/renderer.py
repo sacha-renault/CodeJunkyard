@@ -57,13 +57,14 @@ class Ui:
                     print(f"Number of planets : {len(self.system.bodies)}")
                 else:
                     print(event.key)
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.mouse_pos = pygame.mouse.get_pos()
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 new_pos = pygame.mouse.get_pos()
-                offset = (new_pos[0] - self.mouse_pos[0], new_pos[1] - self.mouse_pos[1])
-                if event.button == 1:
+                if event.button == 1 and self.mouse_pos is not None:
+                    offset = (new_pos[0] - self.mouse_pos[0], new_pos[1] - self.mouse_pos[1])
                     self.offset.set((
                         self.offset.x - offset[0] / self.scale,
                         self.offset.y - offset[1] / self.scale))
