@@ -74,36 +74,43 @@ class Ui:
                 self.scale *= scale_factor
 
     def render_frame(self, bodies: List[Body]) -> None:
+        # clear old screen
         self.screen.fill(self.bg_color)
+
+        # render object one by one
         for obj in bodies:
+
+            # calculate position and size of each object
             x = obj.position.coords[0] / self.scale - self.offset.x
             y = obj.position.coords[1] / self.scale - self.offset.y
-            pygame.draw.circle(self.screen, (0, 0, 255), (int(x), int(y)), int(obj.radius / self.scale))
+            r = obj.radius / self.scale
+
+            # display on circle per body
+            pygame.draw.circle(self.screen, (0, 0, 255), (int(x), int(y)), int(r))
+        # render screen
         pygame.display.update()
 
     def single_step(self):
         try:
-            # calc loop render time
-            start = time.time()
-
             # render the frame
             self.render_frame(self.system.bodies)
 
             # engine calulate new position
             self.system.run_n_step(self.step_per_render)
-
-            # print(f"Frame rendered in {time.time() - start}")
-
         except KeyboardInterrupt:
             print("USER STOP RENDERING")
             self.running = False
+        except Exception as e:
+            # catch any other exception and dispay it to avoid crashing the simulation
+            print(e)
+
 
     def run(self) -> None:
         while self.running:
             # ensure constant frame rate
             self.clock.tick(self.fps)
 
-            # handle input
+            # handle input before rendering frame
             self._handle_input()
 
             # display only if not pause
