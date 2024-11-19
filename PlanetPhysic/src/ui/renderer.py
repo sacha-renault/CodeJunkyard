@@ -39,6 +39,9 @@ class Ui:
         self.scale = scale
         self.step_per_render = step_per_render
 
+        # handle event
+        self.mouse_pos = None
+
     def _handle_input(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -55,15 +58,26 @@ class Ui:
                 else:
                     print(event.key)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 3:
-                    pass # TODO
+                self.mouse_pos = pygame.mouse.get_pos()
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                new_pos = pygame.mouse.get_pos()
+                offset = (new_pos[0] - self.mouse_pos[0], new_pos[1] - self.mouse_pos[1])
+                if event.button == 1:
+                    self.offset.set((
+                        self.offset.x - offset[0] / self.scale,
+                        self.offset.y - offset[1] / self.scale))
+
+            elif event.type == pygame.MOUSEWHEEL:
+                scale_factor = 0.9 if event.y == 1 else 1.1
+                self.scale *= scale_factor
 
     def render_frame(self, bodies: List[Body]) -> None:
         self.screen.fill(self.bg_color)
         for obj in bodies:
             x = obj.position.coords[0] / self.scale - self.offset.x
             y = obj.position.coords[1] / self.scale - self.offset.y
-            pygame.draw.circle(self.screen, (0, 0, 255), (int(x), int(y)), int(obj.radius))
+            pygame.draw.circle(self.screen, (0, 0, 255), (int(x), int(y)), int(obj.radius / self.scale))
         pygame.display.update()
 
     def single_step(self):
@@ -78,11 +92,6 @@ class Ui:
             self.system.run_n_step(self.step_per_render)
 
             # print(f"Frame rendered in {time.time() - start}")
-            # display distance between planet 1
-            b0 = self.system.bodies[0]
-            b1 = self.system.bodies[1]
-            distance = ((b0.position.coords[0] - b1.position.coords[0])**2 + (b0.position.coords[1] - b1.position.coords[1])**2) ** 0.5
-            print(f"{distance=}")
 
         except KeyboardInterrupt:
             print("USER STOP RENDERING")
