@@ -42,13 +42,8 @@ With numba jit, things run much faster. For the same RSA 1024, we can calcualte 
 
 ![Benchmark Results](./assets/fig_numba.png)
 
-1. Calculate the log of the expected time:
-   `log_time = 308 * 0.4531 - 6.5813 = 132.9735`
+`time = 10^(308 * 0.4370 - 6.4744) / (60 * 60 * 24 * 365.25) = 4.192722e+120 years`
 
-2. Convert this to seconds:
-   `time = 9.408058e+132 seconds`
 
-3. To express this in years:
-   `time_years = 2.981234e+125 years`
 
 Still a HUGE number, actually so big we can't really represent what it means but much better!
