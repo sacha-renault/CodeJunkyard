@@ -3,10 +3,16 @@ import random
 from math import floor, log10
 from collections import defaultdict
 import matplotlib.pyplot as plt
-from prime_factorizer import find_prime_factors
 from tqdm import tqdm
 import numpy as np
 from scipy.stats import linregress
+
+TEST_NUMBA = True
+
+if TEST_NUMBA:
+    from prime_factorizer_numba import find_prime_factors
+else:
+    from prime_factorizer import find_prime_factors
 
 def sieve_of_eratosthenes(limit: int):
     """Create an array of prime numbers in [2, limit]"""
@@ -90,4 +96,9 @@ if __name__ == "__main__":
     plt.ylabel("Average compute time")
     plt.title("Benchmark Result")
     plt.legend()
-    plt.savefig("PrimeFactorizer/assets/fig.png")
+
+    print(f"NUMBA: {TEST_NUMBA}, done, saving figure.")
+    if TEST_NUMBA:
+        plt.savefig("PrimeFactorizer/assets/fig_numba.png")
+    else:
+        plt.savefig("PrimeFactorizer/assets/fig.png")

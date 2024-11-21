@@ -36,3 +36,19 @@ This result indicates that solving an RSA 1024-bit problem with this algorithm w
 These results were achieved using Python on a **not so good computer**. If implemented in C++ and run on a high-performance, "monster" computing setup, the performance would likely improve significantly.
 
 However, it’s important to remember that this is a handmade algorithm with no intention to compete with the best-in-class factoring algorithms. It was just fun coding it.
+
+### Edit: Numba JIT compilation
+With numba jit, things run much faster. For the same RSA 1024, we can calcualte a new expected time.
+
+![Benchmark Results](./assets/fig_numba.png)
+
+1. Calculate the log of the expected time:
+   `log_time = 308 * 0.4531 - 6.5813 = 132.9735`
+
+2. Convert this to seconds:
+   `time = 9.408058e+132 seconds`
+
+3. To express this in years:
+   `time_years = 2.981234e+125 years`
+
+Still a HUGE number, actually so big we can't really represent what it means but much better!
