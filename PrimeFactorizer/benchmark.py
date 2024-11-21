@@ -62,15 +62,18 @@ if __name__ == "__main__":
     results = []
 
     # iterate until max_exp
-    progress_bar = tqdm(total=10 * (MAX_EXP - 1) ** 2)
-    for i in range(1, MAX_EXP):
-        for j in range(1, MAX_EXP):
-            for _ in range(10): # make 10 test per exp
-                p = random.choice(prime_dict[i])
-                q = random.choice(prime_dict[j])
-                results.append((p * q, benchmark(p, q, 1)))
-                progress_bar.update(1)
-    progress_bar.close()
+    try:
+        progress_bar = tqdm(total=10 * (MAX_EXP - 1) ** 2)
+        for i in range(1, MAX_EXP):
+            for j in range(1, MAX_EXP):
+                for _ in range(10): # make 10 test per exp
+                    p = random.choice(prime_dict[i])
+                    q = random.choice(prime_dict[j])
+                    results.append((p * q, benchmark(p, q, 1)))
+                    progress_bar.update(1)
+        progress_bar.close()
+    except KeyboardInterrupt:
+        print("Early stopping")
 
     # plotting
     results.sort(key=lambda x: x[1])
