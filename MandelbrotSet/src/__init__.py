@@ -1,6 +1,7 @@
 from typing import Tuple, Callable, Optional
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import trange
 
 complexArray = np.ndarray[np.complex128]
 maskArray = np.ndarray[int]
@@ -54,15 +55,22 @@ def fc(z: complexArray, c: complexArray) -> complexArray:
     """basic mandelbrot function `fc`"""
     return z ** 2 + c
 
-def mandelbrot(c: complexArray, max_iter: int, overflow_limit: float, fc: Callable[[complexArray], complexArray]) -> maskArray:
+def mandelbrot(c: complexArray,
+               max_iter: int,
+               overflow_limit: float,
+               fc: Callable[[complexArray], complexArray],
+               use_tqdm: bool = False) -> maskArray:
     # z starts as 0
     z = np.zeros(c.shape, dtype=np.complex128)
 
     # init an empty mask
     mask = np.zeros(c.shape, dtype=int)
 
+    #chose between tqdm and range
+    iterable = trange(max_iter) if use_tqdm else range(max_iter)
+
     # loop to do all iterations
-    for i in range(max_iter):
+    for i in iterable:
 
         # calculate where current mask is 0
         null_mask = (mask == 0)
@@ -88,10 +96,14 @@ def mandelbrot(c: complexArray, max_iter: int, overflow_limit: float, fc: Callab
 def display_mandelbrot(grid_size: Tuple[int, int],
                        aabb: Tuple[float, float, float, float],
                        max_iter: int,
-                       overflow_limit: float) -> None:
-    # computation
+                       overflow_limit: float,
+                       fc: Callable[[complexArray], complexArray],
+                       use_tqdm: bool = False) -> None:
+    # initialize the grid
     grid = initialize_grid(grid_size, *aabb)
-    mask = mandelbrot(grid, max_iter, overflow_limit, lambda z, c : z**2 + c)
+
+    # compute an approx of mandlebrot set
+    mask = mandelbrot(grid, max_iter, overflow_limit, fc, use_tqdm)
 
     # display
     fig, ax = plt.subplots(1, 1, figsize=(10,10))
