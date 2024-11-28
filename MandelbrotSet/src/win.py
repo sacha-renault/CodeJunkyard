@@ -117,6 +117,13 @@ class MandelbrotWindow:
         grid = initialize_grid(self.size, *self.aabb)
         raw_img = mandelbrot(grid, self.max_iter, self.overflow_limit, self.func, use_tqdm=True)
 
+        # print min max value to know what's currently dispayed
+        min_complexe = grid.imag.min()
+        max_complexe = grid.imag.max()
+        min_real = grid.real.min()
+        max_real = grid.real.max()
+        print(f"{min_real=}, {max_real=}, {min_complexe=}, {max_complexe=}")
+
         # Normalize the raw_img values to [0, 1] for colormap application
         normalized_img = raw_img / self.max_iter
 
