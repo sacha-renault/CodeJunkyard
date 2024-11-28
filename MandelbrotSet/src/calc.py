@@ -5,6 +5,7 @@ from tqdm import trange
 
 complexArray = np.ndarray[np.complex128]
 maskArray = np.ndarray[int]
+ComplexArrayFunction = Callable[[complexArray, complexArray], complexArray]
 
 def initialize_grid(dimensions: Tuple[int, int],
                     real_min: float,

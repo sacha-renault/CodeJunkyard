@@ -1,27 +1,30 @@
-from typing import Tuple
+from typing import Tuple, Optional
 from matplotlib import cm
 from PIL import Image, ImageTk
 import numpy as np
 import tkinter as tk
-from .calc import mandelbrot, fc, initialize_grid
+from .calc import mandelbrot, fc, initialize_grid, ComplexArrayFunction
 
 class MandelbrotWindow:
-    def __init__(self, 
-                 size: Tuple[int, int], 
+    def __init__(self,
+                 size: Tuple[int, int],
                  aabb: Tuple[int, int, int, int],
-                 overflow_limit: float, 
-                 max_iter: float) -> None:
+                 overflow_limit: float,
+                 max_iter: float,
+                 func: Optional[ComplexArrayFunction] = None
+                 ) -> None:
         self.size = size
         self.init_aabb = aabb
         self.aabb = aabb
         self.overflow_limit = overflow_limit
         self.max_iter = max_iter
+        self.func = func if func is not None else fc
 
         # Initialize Tkinter
         self.root = tk.Tk()
         self.root.title("Mandelbrot Set")
         self.root.geometry(f"{size[0]}x{size[1]}")
-        
+
         self.canvas = tk.Canvas(self.root, width=size[0], height=size[1])
         self.canvas.pack()
 
@@ -112,7 +115,7 @@ class MandelbrotWindow:
         """Draw the Mandelbrot set on the canvas with a 'hot' colormap."""
         # Generate the grid and calculate the Mandelbrot set
         grid = initialize_grid(self.size, *self.aabb)
-        raw_img = mandelbrot(grid, self.max_iter, self.overflow_limit, fc, use_tqdm=True)
+        raw_img = mandelbrot(grid, self.max_iter, self.overflow_limit, self.func, use_tqdm=True)
 
         # Normalize the raw_img values to [0, 1] for colormap application
         normalized_img = raw_img / self.max_iter
